@@ -29,7 +29,9 @@ SECRET_KEY = 'django-insecure-y24s%45w-sp9c6joh!8=tz86y+70%%#&1s#6j)6q&p9rzy6(5q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['thought-expt-api.onrender.com']
+
 
 
 # Application definition
@@ -119,9 +121,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 
