@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-y24s%45w-sp9c6joh!8=tz86y+70%%#&1s#6j)6q&p9rzy6(5q
 DEBUG = True
 
 #ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['thought-expt-api.onrender.com']
+ALLOWED_HOSTS = ['thought-expt-api.onrender.com', '127.0.0.1', 'localhost']
 
 
 
@@ -63,7 +63,7 @@ ROOT_URLCONF = 'thought_expt_api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
