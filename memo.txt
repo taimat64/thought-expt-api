@@ -1,0 +1,7 @@
+{
+    "user_id": "try",
+    "password": "try",
+    "password_confirmation": "try",
+    "username": "try",
+    "email": "try@example.com"
+}
