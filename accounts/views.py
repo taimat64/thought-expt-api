@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
 from rest_framework.generics import GenericAPIView
 from .models import User, AccessToken
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny
 
 from .serializers import RegisterSerializer, LoginSerializer
@@ -21,21 +20,28 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             # パスワードと確認パスワードが一致しない場合
-            if serializer.validated_data['password'] != request.data['password_confirmation']:
-                return Response({'error': 2}, status=HTTP_400_BAD_REQUEST)
+            # if serializer.validated_data['password'] != request.data['password_confirmation']:
+            #     return Response({'error': 2}, status=HTTP_400_BAD_REQUEST)
 
-            # UserIDがすでに使われていた場合
-            if User.objects.filter(username=serializer.validated_data['username']).exists():  # 'username'に変更
+            # Emailがすでに使われていた場合
+            if User.objects.filter(email=serializer.validated_data['email']).exists(): 
                 return Response({'error': 3}, status=HTTP_400_BAD_REQUEST)
 
             # エラーなし
             try:
-                serializer.save()
+                user = serializer.save()
             except:
                 # データベースエラー
                 return Response({'error': 11}, status=HTTP_500_INTERNAL_SERVER_ERROR)
+            
+            response_data = {
+                'uuid': str(user.user_id),  # UUIDの場合は文字列に変換
+                'username': user.username,
+                'email': user.email
+            }
 
-            return Response(serializer.data, status=HTTP_201_CREATED)
+
+            return Response(response_data, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 class LoginView(GenericAPIView):
@@ -46,12 +52,12 @@ class LoginView(GenericAPIView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            user_id = serializer.validated_data["user_id"]
-            user = User.objects.filter(user_id=user_id).first()
+            email = serializer.validated_data["email"]
+            user = User.objects.filter(email=email).first()
             if not user:
                 return Response({'error': "ユーザーが存在しません。"}, status=HTTP_404_NOT_FOUND)
 
             token = AccessToken.create(user)
-            return Response({'detail': "ログインが成功しました。", 'error': 0, 'token': token.token, 'user_id': user_id})
+            return Response({'detail': "ログインが成功しました。", 'error': 0, 'token': token.token, 'email': email})
         
         return Response({'error': 1}, status=HTTP_400_BAD_REQUEST)

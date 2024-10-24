@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Import dj-database-url at the beginning of the file.
 import os
@@ -102,7 +103,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'thought_expt_db',
         'USER': 'postgres',
-        'PASSWORD': '1220',
+        'PASSWORD': config('DATABASE_PASSWORD'),  # .envから取得
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
