@@ -92,6 +92,7 @@ WSGI_APPLICATION = 'thought_expt_api.wsgi.application'
 #     }
 # }
 
+#リモートデータベース
 # Replace the SQLite DATABASES configuration with PostgreSQL:
 DATABASES = {
     'default': dj_database_url.config(
@@ -101,16 +102,17 @@ DATABASES = {
     )
 }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'thought_expt_db',
-        'USER': 'postgres',
-        'PASSWORD': config('DATABASE_PASSWORD'),  # .envから取得
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-}
+#ローカルデータベース
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'thought_expt_db',
+#         'USER': 'postgres',
+#         'PASSWORD': config('DATABASE_PASSWORD'),  # .envから取得
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
