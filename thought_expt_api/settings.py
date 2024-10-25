@@ -14,6 +14,7 @@ from pathlib import Path
 from decouple import config
 
 # Import dj-database-url at the beginning of the file.
+import dj_database_url
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'accounts',
 ]
 
@@ -56,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = 'thought_expt_api.urls'
@@ -90,13 +93,13 @@ WSGI_APPLICATION = 'thought_expt_api.wsgi.application'
 # }
 
 # Replace the SQLite DATABASES configuration with PostgreSQL:
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         # Replace this value with your local database's connection string.
-#         default='postgresql://postgres:postgres@localhost:5432/mysite',
-#         conn_max_age=600
-#     )
-# }
+DATABASES = {
+    'default': dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default='postgresql://postgres:postgres@localhost:5432/mysite',
+        conn_max_age=600
+    )
+}
 
 DATABASES = {
     'default': {
@@ -154,4 +157,10 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Use WhiteNoise storage for production and development if necessary
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# CORS
+#全てのオリジン許可
+CORS_ALLOW_ALL_ORIGINS = True
+#認証許可
+CORS_ALLOW_CREDENTIALS = True
 

@@ -25,21 +25,21 @@ class RegisterView(APIView):
 
             # Emailがすでに使われていた場合
             if User.objects.filter(email=serializer.validated_data['email']).exists(): 
-                return Response({'error': 3}, status=HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Emailが既に使われています'}, status=HTTP_400_BAD_REQUEST)
 
             # エラーなし
             try:
                 user = serializer.save()
             except:
                 # データベースエラー
-                return Response({'error': 11}, status=HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response({'error': 'サーバー接続が切れました'}, status=HTTP_500_INTERNAL_SERVER_ERROR)
             
             response_data = {
                 'uuid': str(user.user_id),  # UUIDの場合は文字列に変換
                 'username': user.username,
-                'email': user.email
+                'email': user.email,
+                'error': '',
             }
-
 
             return Response(response_data, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
@@ -58,6 +58,6 @@ class LoginView(GenericAPIView):
                 return Response({'error': "ユーザーが存在しません。"}, status=HTTP_404_NOT_FOUND)
 
             token = AccessToken.create(user)
-            return Response({'detail': "ログインが成功しました。", 'error': 0, 'token': token.token, 'email': email})
+            return Response({'error': 0, 'token': token.token, 'email': email})
         
         return Response({'error': 1}, status=HTTP_400_BAD_REQUEST)
