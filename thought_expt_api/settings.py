@@ -92,6 +92,7 @@ WSGI_APPLICATION = 'thought_expt_api.wsgi.application'
 #     }
 # }
 
+#リモートデータベース
 # Replace the SQLite DATABASES configuration with PostgreSQL:
 #リモートデータベース
 DATABASES = {
