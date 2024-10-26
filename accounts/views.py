@@ -57,7 +57,7 @@ class LoginView(GenericAPIView):
             if not user:
                 return Response({'error': "ユーザーが存在しません。"}, status=HTTP_404_NOT_FOUND)
 
-            token = AccessToken.create(user)
+            token = AccessToken.create(user=user)
             return Response({'error': 0, 'token': token.token, 'email': email})
         
         return Response({'error': 1}, status=HTTP_400_BAD_REQUEST)

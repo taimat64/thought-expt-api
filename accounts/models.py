@@ -33,18 +33,18 @@ class AccessToken(models.Model):
     @staticmethod
     def create(user: User):
         # ユーザの既存のトークンを取得
-        if AccessToken.objects.filter(user=user).exists():
+        if AccessToken.objects.filter(user_id=user.user_id).exists():
             # トークンがすでに存在している場合は削除
-            AccessToken.objects.get(user=user).delete()
+            AccessToken.objects.get(user_id=user.user_id).delete()
 
         # トークン作成（UserID + Password + システム日付のハッシュ値とする）
         dt = timezone.now()
-        str = str(user.user_id) + user.password + dt.strftime('%Y%m%d%H%M%S%f')
-        hash = hashlib.sha1(str.encode('utf-8')).hexdigest()
+        str_val = str(user.user_id) + user.password + dt.strftime('%Y%m%d%H%M%S%f')
+        hash = hashlib.sha1(str_val.encode('utf-8')).hexdigest()
 
         # トークンをDBに追加
         token = AccessToken.objects.create(
-            user=user,
+            user_id=user.user_id,
             token=hash,
             access_datetime=dt)
 
