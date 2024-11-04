@@ -7,39 +7,28 @@ from .models import User, AccessToken
 from rest_framework.permissions import AllowAny
 from rest_framework import viewsets
 
-from .serializers import RegisterSerializer, LoginSerializer
+from .serializers import QuestionSerializer
 
 # HelloWorld
 def helloworldfunction(request):
     return render(request, 'index.html')
 
 
-class RegisterView(APIView):
+class QuestionView(APIView):
     @staticmethod
     def post(request, *args, **kwargs):
         print(request.data)
-        serializer = RegisterSerializer(data=request.data)
+        serializer = QuestionSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            # パスワードと確認パスワードが一致しない場合
-            # if serializer.validated_data['password'] != request.data['password_confirmation']:
-            #     return Response({'error': 2}, status=HTTP_400_BAD_REQUEST)
-
-            # Emailがすでに使われていた場合
-            if User.objects.filter(email=serializer.validated_data['email']).exists(): 
-                return Response({'error': 'Emailが既に使われています'}, status=HTTP_400_BAD_REQUEST)
-
             # エラーなし
             try:
-                user = serializer.save()
+                question = serializer.save()
             except:
                 # データベースエラー
                 return Response({'error': 'サーバー接続が切れました'}, status=HTTP_500_INTERNAL_SERVER_ERROR)
             
             response_data = {
-                'uuid': str(user.user_id),  # UUIDの場合は文字列に変換
-                'username': user.username,
-                'email': user.email,
-                'error': '',
+               'question_id': str(question.question_id)
             }
 
             return Response(response_data, status=HTTP_201_CREATED)

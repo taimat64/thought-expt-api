@@ -10,3 +10,19 @@
     "email": "a@example.com",
     "password": "c"
 }
+
+// サインアップ
+Invoke-RestMethod -Uri "http://localhost:8000/accounts/signup/" -Method Post -Headers @{ "Content-Type" = "application/json" } -Body '{"username": "d", "email": "d@example.com", "password": "d"}'
+
+// ログイン
+Invoke-RestMethod -Uri "http://localhost:8000/accounts/login/" -Method Post -Headers @{ "Content-Type" = "application/json" } -Body '{"email": "d@example.com","password": "d"}'
+
+
+問題投稿
+{
+    "theme": "トロッコ問題",
+    "question_text": "問題",
+    "choice1": "1",
+    "choice2": "2"
+}
+

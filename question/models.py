@@ -1,11 +1,14 @@
+import uuid
 from django.db import models
-from accounts.models import User
+from accounts.models import User, AccessToken
+
 
 class Question(models.Model):
-    question_id =  models.CharField(max_length=10,primary_key=True)
+    question_id = models.UUIDField(
+        max_length=36, primary_key=True, default=uuid.uuid4, editable=False
+    )
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     theme = models.CharField(max_length=40)
-    # thumbnail = models.ImageField()
     question_text = models.TextField()
     choice1 = models.CharField(max_length=40)
     choice2 = models.CharField(max_length=40)
