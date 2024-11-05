@@ -1,0 +1,22 @@
+databases:
+  - name: thought_expt_api_db
+    plan: free
+    databaseName: thought_expt_api
+    user: thought_expt_api
+
+services:
+  - type: web
+    plan: free
+    name: thought_expt_api
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "python -m gunicorn thought_expt_api.asgi:application -k uvicorn.workers.UvicornWorker"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: thought_expt_api_db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4

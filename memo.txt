@@ -1,0 +1,12 @@
+新規登録テスト
+{
+    "username": "c",
+    "email": "c@example.com",
+    "password": "c"
+}
+
+ログインテスト
+{
+    "email": "a@example.com",
+    "password": "c"
+}
