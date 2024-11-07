@@ -17,6 +17,9 @@ Invoke-RestMethod -Uri "http://localhost:8000/accounts/signup/" -Method Post -He
 // ログイン
 Invoke-RestMethod -Uri "http://localhost:8000/accounts/login/" -Method Post -Headers @{ "Content-Type" = "application/json" } -Body '{"email": "d@example.com","password": "d"}'
 
+// 問題投稿curl
+Invoke-RestMethod -Uri "http://localhost:8000/questions/" -Method Post -Headers @{ "Content-Type" = "application/json" } -Body '{"user_id": "d","theme": "テーマ", "question_text": "問題文", "choice1": "回答１", "choice2": "回答２"}'
+
 
 問題投稿
 {
