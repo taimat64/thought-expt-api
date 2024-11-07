@@ -11,13 +11,13 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 #　問題詳細
 class QuestionDetailSerializer(serializers.ModelSerializer):
-    user_answer = serializers.SerializerMethodField()
+    answers = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
-        fields = ('theme', 'thumbnail', 'question_text', 'choice1', 'choice2','user_answer')  # 必要なフィールドを追加
+        fields = ('theme', 'thumbnail', 'question_text', 'choice1', 'choice2','answers')  # 必要なフィールドを追加
 
-    def get_user_answer(self, obj):
+    def get_answers(self, obj):
         # User_Answerをquestion_idでフィルタリングして取得する
         user_answer = User_Answer.objects.filter(question_id=obj).first()  # question_idでフィルタリング
         if user_answer:
@@ -36,21 +36,20 @@ class QuestionPostSerializer(serializers.ModelSerializer):
 
 #　問題一覧
 class ListQuestionsSerializer(serializers.ModelSerializer):
-    author = serializers.SerializerMethodField()
+    username = serializers.CharField(source='user.username', read_only=True)
+    count = serializers.SerializerMethodField()
     class Meta:
         model = Question
-        fields = ('question_id', 'user_id', 'theme', 'thumbnail','question_text', 'choice1', 'choice2', 'author')
+        fields = ('question_id', 'user_id', 'theme', 'thumbnail', 'username', 'count')
 
-    def get_author(self, obj):
-        try:
-            # `user_id` がUUID形式かを確認する
-            user_id = uuid.UUID(str(obj.user_id))  # UUIDに変換できない場合、エラーをキャッチする
-            # `user_id` で User オブジェクトを取得
-            user = User.objects.get(user_id=user_id)
-            return user.username
-        except (User.DoesNotExist, ValueError):
-            return None  # 無効なUUIDまたはユーザーが見つからない場合は None を返す
+    def get_username(self, obj):
+        username = User.objects.get(user_id=obj.user_id).username
+        return username
         
+    def get_count(self, obj):
+    # 質問のIDに関連するUser_Answerをフィルタリングして、その件数をカウント
+        count = User_Answer.objects.filter(question_id=obj.question_id).count()
+        return count
 
 # ユーザー回答
 class UserAnswerSerializer(serializers.ModelSerializer):

@@ -29,7 +29,10 @@ class QuestionView(APIView):
     def get(self, request, *args, **kwargs):
         queryset = Question.objects.all()
         serializer = ListQuestionsSerializer(queryset, many=True)
-        return Response(serializer.data)
+        responce_data = {
+            'questions': serializer.data 
+        }
+        return Response(responce_data)
     
 
 class QuestionDetailView(APIView):
@@ -65,6 +68,7 @@ class QuestionDetailAnswerView(APIView):
         try:
             question = Question.objects.get(question_id=question_id)
             serializer = QuestionDetailSerializer(question)
+            
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Question.DoesNotExist:
             return Response({"error": "Question not found"}, status=status.HTTP_404_NOT_FOUND)

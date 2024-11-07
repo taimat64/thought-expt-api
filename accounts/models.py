@@ -3,6 +3,7 @@ import hashlib
 from datetime import timedelta
 from django.utils import timezone
 import uuid
+from django.db.models import Count
 
 #ユーザーモデル
 class User(models.Model):
