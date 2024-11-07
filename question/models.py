@@ -5,7 +5,7 @@ from accounts.models import User, AccessToken
 
 class Question(models.Model):
     question_id = models.UUIDField(
-        max_length=36, primary_key=True, default=uuid.uuid4, editable=False
+        unique=True, primary_key=True, default=uuid.uuid4
     )
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     theme = models.CharField(max_length=40)

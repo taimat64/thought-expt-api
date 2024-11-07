@@ -20,9 +20,18 @@ Invoke-RestMethod -Uri "http://localhost:8000/accounts/login/" -Method Post -Hea
 
 問題投稿
 {
+    "user_id": "d9a63559-22a4-4663-839e-0de07ee39f6c",
     "theme": "トロッコ問題",
     "question_text": "問題",
     "choice1": "1",
     "choice2": "2"
 }
 
+解答
+{
+    "question_id": "7946a480-0ee6-42e7-a88f-8fd4a38db588",
+    "user_id": "d9a63559-22a4-4663-839e-0de07ee39f6c",
+    "user_choice": "1",
+    "choice_reason": "text"
+
+}

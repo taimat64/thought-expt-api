@@ -35,10 +35,10 @@ class RegisterView(APIView):
                 return Response({'error': 'サーバー接続が切れました'}, status=HTTP_500_INTERNAL_SERVER_ERROR)
             
             response_data = {
-                'uuid': str(user.user_id),  # UUIDの場合は文字列に変換
+                'user_id': str(user.user_id),  # UUIDの場合は文字列に変換
                 'username': user.username,
                 'email': user.email,
-                'error': '',
+                'error': 0,
             }
 
             return Response(response_data, status=HTTP_201_CREATED)

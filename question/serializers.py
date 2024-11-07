@@ -1,13 +1,54 @@
 from rest_framework import serializers
-from .models import User, Question, User_Answer
+from .models import Question, User_Answer
+from accounts.models import User
+import uuid
 
+#　問題
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ( 'theme', 'question_text', 'choice1', 'choice2')
+        fields = ('theme', 'question_text', 'choice1', 'choice2')
 
-        def create(self, validated_data):
-            question = Question.objects.create(**validated_data)
-            return question
+#　問題詳細
+class QuestionDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ('question_text', '')
+
+#　問題投稿
+class QuestionPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ('user_id', 'theme', 'question_text', 'choice1', 'choice2')
+
+    def create(self, validated_data):
+        question = Question.objects.create(**validated_data)
+        return question
+
+#　問題一覧
+class ListQuestionsSerializer(serializers.ModelSerializer):
+    author = serializers.SerializerMethodField()
+    class Meta:
+        model = Question
+        fields = ('question_id', 'user_id', 'theme', 'question_text', 'choice1', 'choice2', 'author')
+
+    def get_author(self, obj):
+        try:
+            # `user_id` がUUID形式かを確認する
+            user_id = uuid.UUID(str(obj.user_id))  # UUIDに変換できない場合、エラーをキャッチする
+            # `user_id` で User オブジェクトを取得
+            user = User.objects.get(user_id=user_id)
+            return user.username
+        except (User.DoesNotExist, ValueError):
+            return None  # 無効なUUIDまたはユーザーが見つからない場合は None を返す
         
 
+# ユーザー回答
+class UserAnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User_Answer
+        fields = ('question_id', 'user_id', 'user_choice', 'choice_reason')
+    def create(self, validated_data):
+        user_answer = User_Answer.objects.create(**validated_data)
+        return user_answer
+    

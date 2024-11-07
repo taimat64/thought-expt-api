@@ -6,7 +6,7 @@ import uuid
 
 #ユーザーモデル
 class User(models.Model):
-    user_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
+    user_id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True)
     password = models.CharField(max_length=20)
     username = models.CharField(max_length=50)
     email = models.EmailField()
