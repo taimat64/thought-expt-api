@@ -9,6 +9,7 @@ class Question(models.Model):
     )
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     theme = models.CharField(max_length=40)
+    thumbnail = models.URLField(max_length=200, null=True)
     question_text = models.TextField()
     choice1 = models.CharField(max_length=40)
     choice2 = models.CharField(max_length=40)
@@ -17,7 +18,9 @@ class Question(models.Model):
         return self.theme
     
 class User_Answer(models.Model):
-    answer_id = models.CharField(max_length=10,primary_key=True)
+    answer_id = models.UUIDField(
+        unique=True, primary_key=True, default=uuid.uuid4
+    )
     question_id = models.ForeignKey(Question, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     
@@ -25,5 +28,5 @@ class User_Answer(models.Model):
         ('1', 'choice1'),
         ('2', 'choice2')
     ]
-    user_choice = models.CharField(max_length=1, choices=choices)
-    choice_reason = models.TextField()
+    choice = models.CharField(max_length=1, choices=choices)
+    reason = models.TextField()

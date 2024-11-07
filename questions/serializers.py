@@ -7,19 +7,25 @@ import uuid
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ('theme', 'question_text', 'choice1', 'choice2')
+        fields = ('theme', 'thumbnail', 'question_text', 'choice1', 'choice2')
 
 #　問題詳細
 class QuestionDetailSerializer(serializers.ModelSerializer):
+
+    user_answer = serializers.SerializerMethodField()
+
     class Meta:
         model = Question
-        fields = ('question_text', '')
+        fields = ('theme', 'thumbnail', 'question_text', 'choice1', 'choice2', 'user_answer')
+
+    def get_user_answer(self, obj):
+        return User_Answer.objects.get(filter=Question.question_id)
 
 #　問題投稿
 class QuestionPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ('user_id', 'theme', 'question_text', 'choice1', 'choice2')
+        fields = ('user_id', 'theme', 'thumbnail', 'question_text', 'choice1', 'choice2')
 
     def create(self, validated_data):
         question = Question.objects.create(**validated_data)
@@ -30,7 +36,7 @@ class ListQuestionsSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
     class Meta:
         model = Question
-        fields = ('question_id', 'user_id', 'theme', 'question_text', 'choice1', 'choice2', 'author')
+        fields = ('question_id', 'user_id', 'theme', 'thumbnail','question_text', 'choice1', 'choice2', 'author')
 
     def get_author(self, obj):
         try:
@@ -47,7 +53,7 @@ class ListQuestionsSerializer(serializers.ModelSerializer):
 class UserAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = User_Answer
-        fields = ('question_id', 'user_id', 'user_choice', 'choice_reason')
+        fields = ('question_id', 'user_id', 'choice', 'reason')
     def create(self, validated_data):
         user_answer = User_Answer.objects.create(**validated_data)
         return user_answer
