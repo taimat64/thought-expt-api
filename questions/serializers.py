@@ -11,15 +11,18 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 #　問題詳細
 class QuestionDetailSerializer(serializers.ModelSerializer):
-
     user_answer = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
-        fields = ('theme', 'thumbnail', 'question_text', 'choice1', 'choice2', 'user_answer')
+        fields = ('theme', 'thumbnail', 'question_text', 'choice1', 'choice2','user_answer')  # 必要なフィールドを追加
 
     def get_user_answer(self, obj):
-        return User_Answer.objects.get(filter=Question.question_id)
+        # User_Answerをquestion_idでフィルタリングして取得する
+        user_answer = User_Answer.objects.filter(question_id=obj).first()  # question_idでフィルタリング
+        if user_answer:
+            return UserAnswerSerializer(user_answer).data  # シリアライズして返す
+        return None  # ユーザーの回答がない場合はNoneを返す
 
 #　問題投稿
 class QuestionPostSerializer(serializers.ModelSerializer):
